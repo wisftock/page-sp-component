@@ -11,6 +11,7 @@ pages:
   script:
     - npm ci
     - npm run build
+    - rm -rf public
     - mv _site public
   artifacts:
     paths:
