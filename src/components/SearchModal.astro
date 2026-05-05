@@ -1,0 +1,204 @@
+---
+// All searchable components - mirrors Sidebar groups
+const searchItems = [
+  { label: "Getting Started", id: "getting-started", category: "Inicio", icon: "🚀" },
+  { label: "sp-button", id: "buttons", category: "Botones & Acciones", icon: "🔘" },
+  { label: "sp-copy-button", id: "copy-button", category: "Botones & Acciones", icon: "📋" },
+  { label: "sp-input", id: "input", category: "Formularios", icon: "✏️" },
+  { label: "sp-textarea", id: "textarea", category: "Formularios", icon: "📝" },
+  { label: "sp-select", id: "select", category: "Formularios", icon: "🔽" },
+  { label: "sp-combobox", id: "combobox", category: "Formularios", icon: "🔍" },
+  { label: "sp-checkbox", id: "checkbox", category: "Formularios", icon: "☑️" },
+  { label: "sp-switch", id: "switch", category: "Formularios", icon: "🔄" },
+  { label: "sp-radio", id: "radio", category: "Formularios", icon: "🔵" },
+  { label: "sp-slider", id: "slider", category: "Formularios", icon: "🎚️" },
+  { label: "sp-rating", id: "rating", category: "Formularios", icon: "⭐" },
+  { label: "sp-number-input", id: "number-input", category: "Formularios", icon: "🔢" },
+  { label: "sp-otp-input", id: "otp-input", category: "Formularios", icon: "🔐" },
+  { label: "sp-tag-input", id: "tag-input", category: "Formularios", icon: "🏷️" },
+  { label: "sp-autocomplete", id: "autocomplete", category: "Formularios", icon: "💡" },
+  { label: "sp-file-upload", id: "file-upload", category: "Formularios", icon: "📁" },
+  { label: "sp-form-field", id: "form-field", category: "Formularios", icon: "📋" },
+  { label: "sp-time-picker", id: "time-picker", category: "Formularios", icon: "⏰" },
+  { label: "sp-color-picker", id: "color-picker", category: "Formularios", icon: "🎨" },
+  { label: "sp-tabs", id: "tabs", category: "Navegación", icon: "📑" },
+  { label: "sp-breadcrumb", id: "breadcrumb", category: "Navegación", icon: "🗺️" },
+  { label: "sp-pagination", id: "pagination", category: "Navegación", icon: "📄" },
+  { label: "sp-stepper", id: "stepper", category: "Navegación", icon: "👣" },
+  { label: "sp-menu", id: "menu", category: "Navegación", icon: "☰" },
+  { label: "sp-navbar", id: "navbar", category: "Navegación", icon: "🔝" },
+  { label: "sp-sidebar", id: "sidebar-comp", category: "Navegación", icon: "◀️" },
+  { label: "sp-modal", id: "modal", category: "Overlays", icon: "🪟" },
+  { label: "sp-drawer", id: "drawer", category: "Overlays", icon: "📐" },
+  { label: "sp-tooltip", id: "tooltip", category: "Overlays", icon: "💬" },
+  { label: "sp-popover", id: "popover", category: "Overlays", icon: "💭" },
+  { label: "sp-toast", id: "toast", category: "Overlays", icon: "🍞" },
+  { label: "sp-toast-stack", id: "toast-stack", category: "Overlays", icon: "📚" },
+  { label: "sp-confirm-dialog", id: "confirm-dialog", category: "Overlays", icon: "❓" },
+  { label: "sp-table", id: "table", category: "Datos", icon: "📊" },
+  { label: "sp-accordion", id: "accordion", category: "Datos", icon: "🪗" },
+  { label: "sp-card", id: "card", category: "Datos", icon: "🃏" },
+  { label: "sp-badge", id: "badge", category: "Datos", icon: "🏅" },
+  { label: "sp-avatar", id: "avatar", category: "Datos", icon: "👤" },
+  { label: "sp-stat", id: "stat", category: "Datos", icon: "📈" },
+  { label: "sp-timeline", id: "timeline", category: "Datos", icon: "📅" },
+  { label: "sp-tree", id: "tree", category: "Datos", icon: "🌳" },
+  { label: "sp-calendar", id: "calendar", category: "Datos", icon: "📆" },
+  { label: "sp-gallery", id: "gallery", category: "Datos", icon: "🖼️" },
+  { label: "sp-carousel", id: "carousel", category: "Datos", icon: "🎠" },
+  { label: "sp-tag", id: "tag", category: "Datos", icon: "🏷️" },
+  { label: "sp-alert", id: "alert", category: "Feedback", icon: "⚠️" },
+  { label: "sp-progress-bar", id: "progress", category: "Feedback", icon: "📊" },
+  { label: "sp-spinner", id: "spinner", category: "Feedback", icon: "⏳" },
+  { label: "sp-skeleton", id: "skeleton", category: "Feedback", icon: "👻" },
+  { label: "sp-split-panel", id: "split-panel", category: "Layout", icon: "⬛" },
+  { label: "sp-scroll-area", id: "scroll-area", category: "Layout", icon: "📜" },
+  { label: "sp-divider", id: "divider", category: "Layout", icon: "➖" },
+  { label: "sp-empty-state", id: "empty-state", category: "Layout", icon: "📭" },
+  { label: "sp-icon", id: "icon", category: "Layout", icon: "✨" },
+  { label: "sp-kbd", id: "kbd", category: "Layout", icon: "⌨️" },
+  { label: "Formulario completo", id: "form-demo", category: "Avanzado", icon: "📋" },
+  { label: "sp-command-palette", id: "command-palette", category: "Avanzado", icon: "⌨️" },
+];
+---
+
+<div class="search-backdrop" id="search-backdrop" role="dialog" aria-modal="true" aria-label="Buscar componente">
+  <div class="search-modal" id="search-modal">
+    <div class="search-input-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input
+        class="search-input"
+        id="search-input"
+        type="search"
+        placeholder="Buscar componentes..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <kbd class="search-kbd">Esc</kbd>
+    </div>
+    <div class="search-results" id="search-results" role="listbox"></div>
+    <div class="search-footer">
+      <span class="search-footer-hint"><kbd class="search-kbd">↑↓</kbd> navegar</span>
+      <span class="search-footer-hint"><kbd class="search-kbd">↵</kbd> ir</span>
+      <span class="search-footer-hint"><kbd class="search-kbd">Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ searchItems }}>
+  const backdrop = document.getElementById('search-backdrop');
+  const input = document.getElementById('search-input');
+  const resultsEl = document.getElementById('search-results');
+  let activeIdx = -1;
+  let filtered = [];
+
+  function open() {
+    backdrop.classList.add('open');
+    setTimeout(() => input?.focus(), 50);
+    renderResults('');
+  }
+
+  function close() {
+    backdrop.classList.remove('open');
+    input.value = '';
+    activeIdx = -1;
+  }
+
+  function renderResults(q) {
+    const query = q.toLowerCase().trim();
+    if (!query) {
+      filtered = searchItems.slice(0, 12);
+    } else {
+      filtered = searchItems.filter(item =>
+        item.label.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query) ||
+        item.id.toLowerCase().includes(query)
+      );
+    }
+
+    if (filtered.length === 0) {
+      resultsEl.innerHTML = `<div class="search-empty">No se encontraron componentes para "<strong>${q}</strong>"</div>`;
+      return;
+    }
+
+    // Group by category
+    const byCategory = {};
+    filtered.forEach(item => {
+      if (!byCategory[item.category]) byCategory[item.category] = [];
+      byCategory[item.category].push(item);
+    });
+
+    let html = '';
+    Object.entries(byCategory).forEach(([cat, items]) => {
+      if (!query) html += `<div class="search-group-title">${cat}</div>`;
+      items.forEach((item, i) => {
+        const globalIdx = filtered.indexOf(item);
+        html += `
+          <a class="search-item${globalIdx === activeIdx ? ' active' : ''}"
+             href="#${item.id}"
+             data-idx="${globalIdx}"
+             role="option"
+             aria-selected="${globalIdx === activeIdx}">
+            <div class="search-item-icon">${item.icon}</div>
+            <div>
+              <div class="search-item-name">${item.label}</div>
+              ${query ? `<div class="search-item-cat">${item.category}</div>` : ''}
+            </div>
+          </a>`;
+      });
+    });
+
+    resultsEl.innerHTML = html;
+  }
+
+  input?.addEventListener('input', (e) => {
+    activeIdx = -1;
+    renderResults(e.target.value);
+  });
+
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = Math.min(activeIdx + 1, filtered.length - 1);
+      renderResults(input.value);
+      resultsEl.querySelector('.search-item.active')?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = Math.max(activeIdx - 1, 0);
+      renderResults(input.value);
+      resultsEl.querySelector('.search-item.active')?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const active = filtered[activeIdx] || filtered[0];
+      if (active) {
+        window.location.hash = active.id;
+        close();
+      }
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  resultsEl?.addEventListener('click', (e) => {
+    const item = e.target.closest('.search-item');
+    if (item) {
+      close();
+    }
+  });
+
+  backdrop?.addEventListener('click', (e) => {
+    if (e.target === backdrop) close();
+  });
+
+  // Expose open globally for other components
+  window.__searchOpen = open;
+
+  // Cmd+K / Ctrl+K
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      if (backdrop.classList.contains('open')) close();
+      else open();
+    }
+  });
+</script>

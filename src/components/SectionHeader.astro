@@ -1,0 +1,15 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  desc: string;
+}
+const { icon, title, desc } = Astro.props;
+---
+<div class="section-header">
+  <div class="section-icon">{icon}</div>
+  <div>
+    <div class="section-title">{title}</div>
+    <div class="section-desc">{desc}</div>
+  </div>
+</div>

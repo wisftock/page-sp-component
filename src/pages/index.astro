@@ -1,0 +1,1034 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { components, categories, componentStatuses, componentSizes } from "../data/components";
+const compData = components.map(c => ({ slug: c.slug, label: c.label, tag: c.tag, desc: c.desc ?? '' }));
+---
+
+<BaseLayout title="SP Components — Librería de Web Components" description="Librería de Web Components construida con Lit. Compatible con cualquier framework o HTML vainilla.">
+
+  <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <a class="topbar-logo" href="/">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <span class="topbar-logo-text">SP Components</span>
+    </a>
+
+    <nav class="topbar-nav">
+      <a href="#components" class="topbar-link">Componentes</a>
+      <a href="#getting-started" class="topbar-link">Instalación</a>
+      <a href="https://sp-component-182cbe.gitlab.io" target="_blank" rel="noopener" class="topbar-link">
+        <!-- Storybook icon -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.34.24l-.12 2.71a.18.18 0 00.29.15l1.06-.8.9.7a.18.18 0 00.28-.14L18.65 0zM9.8 4.47C4.37 4.47 0 6.67 0 9.4c0 1.37 1.06 2.62 2.8 3.56L3 11.48a.48.48 0 01.64-.63l.8.36a4 4 0 00-.31-1.73c1.05-.43 2.37-.69 3.82-.69 3.2 0 5.77 1.35 5.77 3.02 0 .58-.3 1.12-.83 1.58l.97.43a.48.48 0 01.02.86l-.8.37.2 1.53c1.57-.94 2.53-2.14 2.53-3.44 0-2.73-4.37-4.94-9.81-4.94zm8.34 1.66l-1.51.22-.07 1.12a5.3 5.3 0 00-1.12-.12c-3.51 0-6.32 1.76-6.32 3.95 0 2.18 2.8 3.95 6.32 3.95s6.32-1.77 6.32-3.95c0-1.54-1.35-2.89-3.33-3.6l-.3-1.57zM6.6 11.17a.53.53 0 110 1.06.53.53 0 010-1.06zm6.78 0a.53.53 0 110 1.06.53.53 0 010-1.06z"/></svg>
+        Storybook
+      </a>
+      <a href="https://github.com/wisftock/sp-component" target="_blank" rel="noopener" class="topbar-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://gitlab.com/wisftock/sp-component" target="_blank" rel="noopener" class="topbar-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+        GitLab
+      </a>
+    </nav>
+
+    <div class="topbar-right">
+      <button class="search-trigger" id="search-trigger" aria-label="Buscar componente">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span class="search-trigger-text">Buscar…</span>
+        <kbd class="search-kbd">⌘K</kbd>
+      </button>
+      <button class="theme-btn" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
+      <button class="topbar-menu-btn" id="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">
+        <svg id="menu-icon-open" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg id="menu-icon-close" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Mobile nav ────────────────────────────────────────────────────────── -->
+  <nav class="mobile-nav" id="mobile-nav" hidden>
+    <a href="#components" class="mobile-nav-link" id="mnav-components">Componentes</a>
+    <a href="#getting-started" class="mobile-nav-link" id="mnav-install">Instalación</a>
+    <div class="mobile-nav-sep"></div>
+    <a href="https://sp-component-182cbe.gitlab.io" target="_blank" rel="noopener" class="mobile-nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.34.24l-.12 2.71a.18.18 0 00.29.15l1.06-.8.9.7a.18.18 0 00.28-.14L18.65 0zM9.8 4.47C4.37 4.47 0 6.67 0 9.4c0 1.37 1.06 2.62 2.8 3.56L3 11.48a.48.48 0 01.64-.63l.8.36a4 4 0 00-.31-1.73c1.05-.43 2.37-.69 3.82-.69 3.2 0 5.77 1.35 5.77 3.02 0 .58-.3 1.12-.83 1.58l.97.43a.48.48 0 01.02.86l-.8.37.2 1.53c1.57-.94 2.53-2.14 2.53-3.44 0-2.73-4.37-4.94-9.81-4.94zm8.34 1.66l-1.51.22-.07 1.12a5.3 5.3 0 00-1.12-.12c-3.51 0-6.32 1.76-6.32 3.95 0 2.18 2.8 3.95 6.32 3.95s6.32-1.77 6.32-3.95c0-1.54-1.35-2.89-3.33-3.6l-.3-1.57zM6.6 11.17a.53.53 0 110 1.06.53.53 0 010-1.06zm6.78 0a.53.53 0 110 1.06.53.53 0 010-1.06z"/></svg>
+      Storybook
+    </a>
+    <a href="https://github.com/wisftock/sp-component" target="_blank" rel="noopener" class="mobile-nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+    <a href="https://gitlab.com/wisftock/sp-component" target="_blank" rel="noopener" class="mobile-nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+      GitLab
+    </a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">v1.0.0 — Estable</div>
+      <h1 class="hero-title">Componentes UI<br/>para la web moderna</h1>
+      <p class="hero-sub">
+        {components.length} Web Components construidos con Lit. Sin dependencias, accesibles, con dark mode y compatibles con cualquier framework — o solo HTML vainilla.
+      </p>
+      <div class="hero-chips">
+        <sp-tag variant="primary">Dark mode</sp-tag>
+        <sp-tag>Form-associated</sp-tag>
+        <sp-tag>ARIA compliant</sp-tag>
+        <sp-tag>TypeScript</sp-tag>
+        <sp-tag>Tree-shakeable</sp-tag>
+      </div>
+      <div class="hero-actions">
+        <sp-button variant="primary" href="#components" size="lg">Explorar componentes</sp-button>
+        <sp-button variant="secondary" href="#getting-started" size="lg">Instalación</sp-button>
+        <sp-button variant="ghost" href="https://github.com/wisftock/sp-component" target="_blank">GitHub</sp-button>
+        <sp-button variant="ghost" href="https://gitlab.com/wisftock/sp-component" target="_blank">GitLab</sp-button>
+        <sp-button variant="ghost" href="https://sp-component-182cbe.gitlab.io" target="_blank">Storybook</sp-button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats">
+      <sp-stat value={String(components.length)} label="componentes"></sp-stat>
+      <div class="stat-sep"></div>
+      <sp-stat value={String(categories.length)} label="categorías"></sp-stat>
+      <div class="stat-sep"></div>
+      <sp-stat value="0" label="dependencias"></sp-stat>
+      <div class="stat-sep"></div>
+      <sp-stat value="A11Y" label="accesible"></sp-stat>
+    </div>
+  </section>
+
+  <!-- ── Getting Started ───────────────────────────────────────────────────── -->
+  <section class="section" id="getting-started">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Instalación</h2>
+        <p class="section-sub">Empieza en segundos — elige la forma que prefieras</p>
+      </div>
+
+      <div class="install-grid">
+        <div class="install-card">
+          <div class="install-card-head">
+            <span class="install-icon">📦</span>
+            <span class="install-label">npm / pnpm / yarn</span>
+          </div>
+          <pre class="install-code"><code id="c1">npm install sp-component</code></pre>
+          <div class="install-tabs">
+            <button class="itab itab--active" data-cmd="npm install sp-component" data-target="c1">npm</button>
+            <button class="itab" data-cmd="pnpm add sp-component" data-target="c1">pnpm</button>
+            <button class="itab" data-cmd="yarn add sp-component" data-target="c1">yarn</button>
+          </div>
+        </div>
+
+        <div class="install-card">
+          <div class="install-card-head">
+            <span class="install-icon">🔗</span>
+            <span class="install-label">CDN — sin instalación</span>
+          </div>
+          <pre class="install-code"><code>&lt;script type="module"
+  src="https://unpkg.com/sp-component"&gt;
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <div class="install-card">
+          <div class="install-card-head">
+            <span class="install-icon">⚡</span>
+            <span class="install-label">Importar y usar</span>
+          </div>
+          <pre class="install-code"><code>import 'sp-component/button';
+// o todo el bundle:
+import 'sp-component';
+
+// En HTML:
+&lt;sp-button&gt;Hola mundo&lt;/sp-button&gt;</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Component catalog ─────────────────────────────────────────────────── -->
+  <section class="section" id="components">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 class="section-title">Componentes</h2>
+        <p class="section-sub">{components.length} componentes listos para producción, organizados por categoría</p>
+      </div>
+
+      <!-- Search bar — usando sp-input del propio sistema de diseño -->
+      <div class="cat-search-wrap">
+        <sp-input
+          id="cat-search"
+          placeholder="Buscar por nombre, tag o descripción…"
+          clearable
+          autocomplete="off"
+          spellcheck="false"
+          class="cat-search-input"
+        ></sp-input>
+      </div>
+
+      <!-- Category filters -->
+      <div class="cat-filters" id="cat-filters">
+        <button class="cat-filter cat-filter--active" data-cat="">Todos ({components.length})</button>
+        {categories.map(cat => (
+          <button class="cat-filter" data-cat={cat}>
+            {cat} ({components.filter(c => c.category === cat).length})
+          </button>
+        ))}
+      </div>
+
+      <!-- Component grid -->
+      {categories.map(cat => (
+        <div class="cat-group" data-category={cat}>
+          <h3 class="cat-group-title">{cat}</h3>
+          <div class="comp-grid">
+            {components.filter(c => c.category === cat).map(c => (
+              <a class="comp-card" href={`/components/${c.slug}`} data-name={c.label.toLowerCase()} data-tag={c.tag} data-desc={c.desc.toLowerCase()}>
+                <div class="comp-card-body">
+                  <div class="comp-card-name-row">
+                    <span class="comp-card-name">{c.label}</span>
+                    {componentStatuses[c.slug] === 'new' && <span class="comp-status-badge comp-status-badge--new">Nuevo</span>}
+                    {componentStatuses[c.slug] === 'beta' && <span class="comp-status-badge comp-status-badge--beta">Beta</span>}
+                  </div>
+                  <div class="comp-card-tag">&lt;{c.tag}&gt;</div>
+                  <div class="comp-card-desc">{c.desc}</div>
+                  {componentSizes[c.slug] && <div class="comp-card-size">{componentSizes[c.slug]} min+gz</div>}
+                </div>
+                <div class="comp-card-arrow">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <!-- Empty state for search -->
+      <div class="no-results" id="no-results" hidden>
+        <div class="no-results-icon">🔍</div>
+        <div class="no-results-title">Sin resultados</div>
+        <div class="no-results-sub">Prueba con otro término de búsqueda</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        <span>SP Components</span>
+      </div>
+      <div class="footer-links">
+        <a href="#getting-started">Instalación</a>
+        <a href="#components">Componentes</a>
+        <a href="https://github.com/wisftock/sp-component" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gitlab.com/wisftock/sp-component" target="_blank" rel="noopener">GitLab</a>
+        <a href="https://sp-component-182cbe.gitlab.io" target="_blank" rel="noopener">Storybook</a>
+      </div>
+      <div class="footer-note">Construido con Lit · TypeScript · Astro</div>
+    </div>
+  </footer>
+
+  <!-- ── Keyboard shortcuts modal ─────────────────────────────────────────── -->
+  <div class="shortcuts-overlay" id="shortcuts-modal" hidden role="dialog" aria-modal="true" aria-label="Atajos de teclado">
+    <div class="shortcuts-backdrop" id="shortcuts-backdrop"></div>
+    <div class="shortcuts-box">
+      <div class="shortcuts-header">
+        <h2 class="shortcuts-title">Atajos de teclado</h2>
+        <button class="shortcuts-close" id="shortcuts-close" aria-label="Cerrar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="shortcuts-body">
+        <div class="shortcuts-group">
+          <div class="shortcuts-group-title">Búsqueda</div>
+          <div class="shortcuts-row"><kbd>⌘K</kbd><span>Abrir buscador de componentes</span></div>
+          <div class="shortcuts-row"><kbd>↑</kbd> <kbd>↓</kbd><span>Navegar resultados</span></div>
+          <div class="shortcuts-row"><kbd>↵</kbd><span>Abrir componente seleccionado</span></div>
+          <div class="shortcuts-row"><kbd>Esc</kbd><span>Cerrar modal</span></div>
+        </div>
+        <div class="shortcuts-group">
+          <div class="shortcuts-group-title">Interfaz</div>
+          <div class="shortcuts-row"><kbd>?</kbd><span>Mostrar / ocultar esta pantalla</span></div>
+          <div class="shortcuts-row"><kbd>D</kbd><span>Alternar tema oscuro / claro</span></div>
+        </div>
+        <div class="shortcuts-group">
+          <div class="shortcuts-group-title">Catálogo</div>
+          <div class="shortcuts-row"><kbd>1</kbd> – <kbd>9</kbd><span>Filtrar por categoría</span></div>
+          <div class="shortcuts-row"><kbd>0</kbd><span>Mostrar todos los componentes</span></div>
+        </div>
+      </div>
+      <div class="shortcuts-footer">Pulsa <kbd>Esc</kbd> o <kbd>?</kbd> para cerrar</div>
+    </div>
+  </div>
+
+  <!-- ── Search modal ─────────────────────────────────────────────────────── -->
+  <div class="idx-search-overlay" id="search-modal" hidden role="dialog" aria-modal="true" aria-label="Buscar componente">
+    <div class="idx-search-backdrop" id="search-backdrop"></div>
+    <div class="idx-search-box">
+      <div class="idx-search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="search-modal-input" class="idx-search-input" type="text" placeholder="Buscar componente…" autocomplete="off" aria-label="Buscar" />
+        <kbd class="idx-search-esc">Esc</kbd>
+      </div>
+      <div class="idx-search-results" id="search-modal-results"></div>
+      <div class="idx-search-footer">
+        <span class="idx-search-hint"><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+        <span class="idx-search-hint"><kbd>↵</kbd> abrir</span>
+        <span class="idx-search-hint"><kbd>Esc</kbd> cerrar</span>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script define:vars={{ compData }} is:inline>
+  window.__COMP_DATA__ = compData;
+</script>
+
+<script>
+  // ── Theme toggle ─────────────────────────────────────────────────────────
+  const themeBtn = document.getElementById('theme-toggle') as HTMLButtonElement;
+  function syncTheme() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (themeBtn) themeBtn.textContent = dark ? '☀️' : '🌙';
+  }
+  syncTheme();
+  themeBtn?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('sp-theme', next);
+    syncTheme();
+  });
+
+  // ── Install tabs ─────────────────────────────────────────────────────────
+  document.querySelectorAll<HTMLButtonElement>('.itab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target!);
+      if (target) target.textContent = btn.dataset.cmd!;
+      btn.closest('.install-card')?.querySelectorAll('.itab').forEach(b => b.classList.remove('itab--active'));
+      btn.classList.add('itab--active');
+    });
+  });
+
+  // ── Category filter ───────────────────────────────────────────────────────
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.cat-filter');
+  const catGroups  = document.querySelectorAll<HTMLElement>('.cat-group');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('cat-filter--active'));
+      btn.classList.add('cat-filter--active');
+      const cat = btn.dataset.cat;
+      catGroups.forEach(g => {
+        g.hidden = !!(cat && g.dataset.category !== cat);
+      });
+    });
+  });
+
+  // ── Inline search — sp-input ─────────────────────────────────────────────
+  const noResults   = document.getElementById('no-results') as HTMLElement;
+  const allCards    = document.querySelectorAll<HTMLAnchorElement>('.comp-card');
+  const catSearchEl = document.getElementById('cat-search') as HTMLElement & { value?: string };
+
+  function runSearch(q: string) {
+    const query = q.toLowerCase().trim();
+    let visible = 0;
+
+    if (query) {
+      filterBtns.forEach(b => b.classList.remove('cat-filter--active'));
+      filterBtns[0]?.classList.add('cat-filter--active');
+      catGroups.forEach(g => g.hidden = false);
+    }
+
+    allCards.forEach(card => {
+      const match = !query
+        || (card.dataset.name ?? '').includes(query)
+        || (card.dataset.tag ?? '').includes(query)
+        || (card.dataset.desc ?? '').includes(query);
+      (card as HTMLElement).style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+
+    catGroups.forEach(g => {
+      const hasVisible = Array.from(g.querySelectorAll('.comp-card')).some(c => (c as HTMLElement).style.display !== 'none');
+      g.hidden = !hasVisible;
+    });
+
+    noResults.hidden = visible > 0;
+  }
+
+  // sp-input dispara el evento personalizado 'sp-input' con detail.value
+  catSearchEl?.addEventListener('sp-input', (e: Event) => {
+    runSearch((e as CustomEvent).detail?.value ?? '');
+  });
+  // Fallback: si por alguna razón el evento nativo 'input' llega al host
+  catSearchEl?.addEventListener('input', () => {
+    runSearch(catSearchEl.value ?? '');
+  });
+  catSearchEl?.addEventListener('sp-clear', () => runSearch(''));
+
+  // ── Mobile nav toggle ─────────────────────────────────────────────────────
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn') as HTMLButtonElement;
+  const mobileNav     = document.getElementById('mobile-nav') as HTMLElement;
+  const menuIconOpen  = document.getElementById('menu-icon-open') as SVGElement;
+  const menuIconClose = document.getElementById('menu-icon-close') as SVGElement;
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    const isOpen = !mobileNav.hidden;
+    mobileNav.hidden = isOpen;
+    mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+    menuIconOpen.style.display  = isOpen ? '' : 'none';
+    menuIconClose.style.display = isOpen ? 'none' : '';
+  });
+
+  mobileNav?.querySelectorAll<HTMLAnchorElement>('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.hidden = true;
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      menuIconOpen.style.display  = '';
+      menuIconClose.style.display = 'none';
+    });
+  });
+
+  // ── Global search modal (⌘K) ─────────────────────────────────────────────
+  const modal        = document.getElementById('search-modal') as HTMLElement;
+  const modalInput   = document.getElementById('search-modal-input') as HTMLInputElement;
+  const modalResults = document.getElementById('search-modal-results') as HTMLElement;
+  const backdrop     = document.getElementById('search-backdrop') as HTMLElement;
+  const trigger      = document.getElementById('search-trigger') as HTMLButtonElement;
+
+  const COMP_DATA = (window as any).__COMP_DATA__ as { slug: string; label: string; tag: string; desc: string }[];
+
+  function renderResults(q: string) {
+    const results = q
+      ? COMP_DATA.filter(c =>
+          c.label.toLowerCase().includes(q) ||
+          c.tag.toLowerCase().includes(q) ||
+          c.desc.toLowerCase().includes(q)
+        ).slice(0, 10)
+      : COMP_DATA.slice(0, 8);
+
+    if (!results.length) {
+      modalResults.innerHTML = `<div class="idx-search-empty">Sin resultados para "<strong>${q}</strong>"</div>`;
+      return;
+    }
+    modalResults.innerHTML = results.map((c, i) => `
+      <a class="idx-search-result${i === 0 ? ' idx-search-result--active' : ''}" href="/components/${c.slug}">
+        <span class="idx-search-result-label">${c.label}</span>
+        <span class="idx-search-result-tag">&lt;${c.tag}&gt;</span>
+      </a>
+    `).join('');
+  }
+
+  function openModal() {
+    modal.hidden = false;
+    modalInput.value = '';
+    renderResults('');
+    requestAnimationFrame(() => modalInput.focus());
+  }
+  function closeModal() { modal.hidden = true; }
+
+  trigger?.addEventListener('click', openModal);
+  backdrop?.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+
+  modalInput?.addEventListener('input', () => renderResults(modalInput.value.toLowerCase().trim()));
+
+  modalResults?.addEventListener('click', e => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('.idx-search-result');
+    if (a) { closeModal(); window.location.href = a.href; }
+  });
+
+  // ── Keyboard shortcuts modal (?  key) ────────────────────────────────────
+  const shortcutsModal  = document.getElementById('shortcuts-modal') as HTMLElement;
+  const shortcutsBackdrop = document.getElementById('shortcuts-backdrop') as HTMLElement;
+  const shortcutsClose  = document.getElementById('shortcuts-close') as HTMLButtonElement;
+
+  function openShortcuts()  { shortcutsModal.hidden = false; }
+  function closeShortcuts() { shortcutsModal.hidden = true;  }
+
+  shortcutsClose?.addEventListener('click', closeShortcuts);
+  shortcutsBackdrop?.addEventListener('click', closeShortcuts);
+
+  document.addEventListener('keydown', e => {
+    const active = document.activeElement as HTMLElement;
+    const typing = ['INPUT','TEXTAREA','SELECT'].includes(active?.tagName ?? '') || active?.isContentEditable;
+    if (typing) return;
+
+    if (e.key === '?') { e.preventDefault(); shortcutsModal.hidden ? openShortcuts() : closeShortcuts(); }
+    if (e.key === 'Escape' && !shortcutsModal.hidden) { closeShortcuts(); }
+
+    // D → toggle dark mode
+    if (e.key === 'd' || e.key === 'D') {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('sp-theme', next);
+      const tb = document.getElementById('theme-toggle');
+      if (tb) tb.textContent = next === 'dark' ? '☀️' : '🌙';
+    }
+
+    // 0-9 → category filter shortcuts
+    if (/^[0-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey) {
+      const idx = parseInt(e.key);
+      const btns = document.querySelectorAll<HTMLButtonElement>('.cat-filter');
+      if (idx === 0) btns[0]?.click();
+      else if (btns[idx]) btns[idx].click();
+    }
+  });
+
+  // ── Scroll entrance animations ────────────────────────────────────────────
+  const animCards = document.querySelectorAll<HTMLElement>('.comp-card');
+  animCards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(14px)';
+  });
+
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const el = entry.target as HTMLElement;
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, i * 25);
+        cardObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+
+  animCards.forEach(card => cardObserver.observe(card));
+
+  modalInput?.addEventListener('keydown', e => {
+    const items = modalResults.querySelectorAll<HTMLElement>('.idx-search-result');
+    const activeIdx = Array.from(items).findIndex(el => el.classList.contains('idx-search-result--active'));
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const next = Math.min(activeIdx + 1, items.length - 1);
+      items.forEach(el => el.classList.remove('idx-search-result--active'));
+      items[next]?.classList.add('idx-search-result--active');
+      items[next]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = Math.max(activeIdx - 1, 0);
+      items.forEach(el => el.classList.remove('idx-search-result--active'));
+      items[prev]?.classList.add('idx-search-result--active');
+      items[prev]?.scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      const active = modalResults.querySelector<HTMLAnchorElement>('.idx-search-result--active');
+      if (active) { closeModal(); window.location.href = active.href; }
+    }
+  });
+</script>
+
+<style>
+  /* ── Reset / base ──────────────────────────────────────────────────────── */
+  body {
+    margin: 0;
+    background: var(--sp-bg);
+    color: var(--sp-text);
+    font-family: var(--font-sans);
+    flex-direction: column;  /* el body global es display:flex, necesitamos columna */
+    align-items: stretch;
+    min-width: 0;
+  }
+
+  /* ── Top bar ───────────────────────────────────────────────────────────── */
+  .topbar {
+    position: sticky; top: 0; z-index: 200;
+    display: flex; align-items: center; gap: 24px;
+    padding: 0 32px; height: 56px;
+    background: var(--sp-bg); border-bottom: 1px solid var(--sp-border);
+    backdrop-filter: blur(8px);
+  }
+  .topbar-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 800; font-size: .95rem; color: var(--sp-primary);
+    text-decoration: none; white-space: nowrap;
+  }
+  .topbar-nav { display: flex; align-items: center; gap: 4px; flex: 1; }
+  .topbar-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 10px; font-size: .82rem; font-weight: 500;
+    color: var(--sp-text-secondary); text-decoration: none;
+    border-radius: var(--radius-sm); transition: color .15s, background .15s;
+  }
+  .topbar-link:hover { color: var(--sp-text); background: var(--sp-bg-subtle); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+  .topbar-menu-btn {
+    display: none; /* visible only on mobile via media query */
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    border: 1px solid var(--sp-border); background: var(--sp-bg-subtle);
+    cursor: pointer; align-items: center; justify-content: center;
+    color: var(--sp-text-secondary); transition: background .15s;
+  }
+  .topbar-menu-btn:hover { background: var(--sp-bg-muted); color: var(--sp-text); }
+
+  /* ── Mobile nav ────────────────────────────────────────────────────────── */
+  .mobile-nav {
+    display: flex; flex-direction: column;
+    position: sticky; top: 52px; z-index: 199;
+    background: var(--sp-bg); border-bottom: 1px solid var(--sp-border);
+    padding: 8px 0; box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  }
+  .mobile-nav[hidden] { display: none; }
+  .mobile-nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 20px; font-size: .9rem; font-weight: 500;
+    color: var(--sp-text-secondary); text-decoration: none;
+    transition: background .12s, color .12s;
+  }
+  .mobile-nav-link:hover { background: var(--sp-bg-subtle); color: var(--sp-text); }
+  .mobile-nav-sep { height: 1px; background: var(--sp-border-subtle); margin: 6px 0; }
+
+  .search-trigger {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: var(--radius-sm);
+    border: 1px solid var(--sp-border); background: var(--sp-bg-subtle);
+    color: var(--sp-text-muted); font-size: .82rem; cursor: pointer;
+    transition: border-color .15s; font-family: var(--font-sans);
+    width: 180px; max-width: calc(100vw - 180px);
+  }
+  .search-trigger:hover { border-color: var(--sp-primary); color: var(--sp-text); }
+  .search-kbd {
+    margin-left: auto; font-size: .7rem; color: var(--sp-text-muted);
+    background: var(--sp-bg-muted); border: 1px solid var(--sp-border);
+    padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono);
+  }
+  .theme-btn {
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    border: 1px solid var(--sp-border); background: var(--sp-bg-subtle);
+    cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .theme-btn:hover { background: var(--sp-bg-muted); }
+
+  /* ── Hero ──────────────────────────────────────────────────────────────── */
+  .hero {
+    text-align: center; padding: 72px 24px 60px;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, var(--sp-primary-bg) 0%, transparent 70%);
+    border-bottom: 1px solid var(--sp-border-subtle);
+  }
+  .hero-inner { max-width: 680px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block; padding: 4px 14px; border-radius: var(--radius-full);
+    background: var(--sp-primary-bg); border: 1px solid var(--sp-primary);
+    color: var(--sp-primary); font-size: .75rem; font-weight: 600;
+    letter-spacing: .04em; margin-bottom: 24px;
+  }
+  .hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 900;
+    line-height: 1.1; letter-spacing: -.02em;
+    color: var(--sp-text); margin: 0 0 20px;
+  }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--sp-text-muted); line-height: 1.7;
+    max-width: 540px; margin: 0 auto 28px;
+  }
+  .hero-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 32px; }
+  .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+  /* Hero stats */
+  .hero-stats {
+    display: flex; align-items: center; justify-content: center;
+    gap: 32px; margin-top: 48px;
+    padding-top: 32px; border-top: 1px solid var(--sp-border-subtle);
+  }
+  .stat-sep { width: 1px; height: 36px; background: var(--sp-border); }
+
+  /* ── Sections ──────────────────────────────────────────────────────────── */
+  .section { padding: 64px 24px; border-bottom: 1px solid var(--sp-border-subtle); }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 40px; }
+  .section-title { font-size: 1.75rem; font-weight: 800; margin: 0 0 10px; color: var(--sp-text); }
+  .section-sub { font-size: .95rem; color: var(--sp-text-muted); margin: 0; }
+
+  /* ── Install cards ─────────────────────────────────────────────────────── */
+  .install-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;
+  }
+  .install-card {
+    border: 1px solid var(--sp-border); border-radius: var(--radius-md);
+    overflow: hidden; background: var(--sp-bg-subtle);
+  }
+  .install-card-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; border-bottom: 1px solid var(--sp-border);
+    font-size: .82rem; font-weight: 600; color: var(--sp-text-secondary);
+  }
+  .install-icon { font-size: 1rem; }
+  .install-code {
+    margin: 0; padding: 14px 16px;
+    background: #0f172a; color: #cbd5e1;
+    font-family: var(--font-mono); font-size: .83rem; line-height: 1.65;
+    overflow-x: auto;
+  }
+  .install-tabs { display: flex; gap: 4px; padding: 8px 12px; border-top: 1px solid var(--sp-border); }
+  .itab {
+    padding: 3px 10px; border-radius: var(--radius-sm);
+    font-size: .75rem; font-weight: 500;
+    background: transparent; border: 1px solid var(--sp-border);
+    color: var(--sp-text-muted); cursor: pointer;
+    transition: background .12s, color .12s;
+    font-family: var(--font-sans);
+  }
+  .itab:hover { background: var(--sp-bg-muted); color: var(--sp-text); }
+  .itab--active { background: var(--sp-primary-bg); color: var(--sp-primary); border-color: var(--sp-primary); }
+
+  /* ── Catalog search + filters ──────────────────────────────────────────── */
+  .cat-search-wrap {
+    max-width: 600px; margin: 0 auto 24px;
+  }
+  /* sp-input ocupa el 100% del contenedor */
+  .cat-search-wrap .cat-search-input {
+    width: 100%; display: block;
+  }
+
+  .cat-filters {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 40px;
+    justify-content: center;
+    /* Mobile: make scrollable */
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .cat-filters::-webkit-scrollbar { display: none; }
+  .cat-filter {
+    padding: 5px 14px; border-radius: var(--radius-full);
+    border: 1px solid var(--sp-border); background: var(--sp-bg-subtle);
+    color: var(--sp-text-secondary); font-size: .8rem; font-weight: 500;
+    cursor: pointer; transition: all .15s; font-family: var(--font-sans);
+  }
+  .cat-filter:hover { border-color: var(--sp-primary); color: var(--sp-primary); }
+  .cat-filter--active {
+    background: var(--sp-primary); color: #fff;
+    border-color: var(--sp-primary);
+  }
+
+  /* ── Category groups ───────────────────────────────────────────────────── */
+  .cat-group { margin-bottom: 48px; }
+  .cat-group-title {
+    font-size: .75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--sp-text-muted);
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--sp-border-subtle);
+  }
+
+  /* ── Status badges ─────────────────────────────────────────────────────── */
+  .comp-card-name-row {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 2px;
+  }
+  .comp-status-badge {
+    display: inline-block; font-size: .65rem; font-weight: 700;
+    padding: 1px 6px; border-radius: var(--radius-full);
+    letter-spacing: .04em; flex-shrink: 0; line-height: 1.6;
+  }
+  .comp-status-badge--new {
+    background: #ecfdf5; color: #059669; border: 1px solid #6ee7b7;
+  }
+  .comp-status-badge--beta {
+    background: #fffbeb; color: #d97706; border: 1px solid #fcd34d;
+  }
+  [data-theme="dark"] .comp-status-badge--new {
+    background: rgba(5,150,105,.15); color: #34d399; border-color: rgba(52,211,153,.3);
+  }
+  [data-theme="dark"] .comp-status-badge--beta {
+    background: rgba(217,119,6,.15); color: #fbbf24; border-color: rgba(251,191,36,.3);
+  }
+
+  /* Bundle size */
+  .comp-card-size {
+    font-size: .68rem; color: var(--sp-text-muted);
+    margin-top: 4px; font-family: var(--font-mono);
+  }
+
+  /* ── Component cards ───────────────────────────────────────────────────── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .comp-card {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; border: 1px solid var(--sp-border);
+    border-radius: var(--radius-md); text-decoration: none;
+    background: var(--sp-bg); transition: all .15s;
+    position: relative;
+  }
+  .comp-card:hover {
+    border-color: var(--sp-primary); background: var(--sp-primary-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  }
+  .comp-card-body { flex: 1; min-width: 0; }
+  .comp-card-name { font-size: .88rem; font-weight: 700; color: var(--sp-text); margin-bottom: 2px; }
+  .comp-card-tag {
+    font-family: var(--font-mono); font-size: .72rem;
+    color: var(--sp-primary); margin-bottom: 5px; display: block;
+  }
+  .comp-card-desc {
+    font-size: .77rem; color: var(--sp-text-muted); line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .comp-card-arrow {
+    color: var(--sp-border); flex-shrink: 0; margin-top: 2px;
+    transition: color .15s, transform .15s;
+  }
+  .comp-card:hover .comp-card-arrow { color: var(--sp-primary); transform: translateX(2px); }
+
+  /* No results */
+  .no-results {
+    text-align: center; padding: 60px 24px;
+  }
+  .no-results-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .no-results-title { font-size: 1.1rem; font-weight: 700; color: var(--sp-text); margin-bottom: 6px; }
+  .no-results-sub { font-size: .88rem; color: var(--sp-text-muted); }
+
+  /* ── Footer ────────────────────────────────────────────────────────────── */
+  .footer { padding: 32px 24px; background: var(--sp-bg-subtle); border-top: 1px solid var(--sp-border); }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 7px;
+    font-weight: 700; font-size: .88rem; color: var(--sp-text);
+  }
+  .footer-links { display: flex; gap: 16px; flex: 1; }
+  .footer-links a {
+    font-size: .82rem; color: var(--sp-text-muted); text-decoration: none;
+    transition: color .15s;
+  }
+  .footer-links a:hover { color: var(--sp-primary); }
+  .footer-note { font-size: .75rem; color: var(--sp-text-muted); margin-left: auto; }
+
+  /* ── Search modal ─────────────────────────────────────────────────────── */
+  .idx-search-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 80px;
+  }
+  .idx-search-overlay[hidden] { display: none; }
+  .idx-search-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+  }
+  .idx-search-box {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px; margin: 0 16px;
+    background: var(--sp-bg); border: 1px solid var(--sp-border);
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.35);
+  }
+  .idx-search-input-wrap {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid var(--sp-border);
+    background: var(--sp-bg-subtle);
+  }
+  .idx-search-input-wrap svg { color: var(--sp-primary); flex-shrink: 0; }
+  .idx-search-input {
+    flex: 1; border: none; outline: none; background: transparent;
+    color: var(--sp-text); font-family: var(--font-sans); font-size: 1rem;
+  }
+  .idx-search-input::placeholder { color: var(--sp-text-muted); }
+  .idx-search-esc {
+    font-size: .68rem; color: var(--sp-text-muted);
+    background: var(--sp-bg-muted); border: 1px solid var(--sp-border);
+    padding: 2px 7px; border-radius: 4px; font-family: var(--font-mono);
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .idx-search-results { max-height: 400px; overflow-y: auto; padding: 6px; }
+  .idx-search-result {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 12px; text-decoration: none;
+    color: var(--sp-text); border-radius: var(--radius-sm); transition: background .1s;
+  }
+  .idx-search-result:hover { background: var(--sp-bg-muted); }
+  .idx-search-result--active { background: var(--sp-primary-bg); }
+  .idx-search-result-label {
+    font-weight: 600; font-size: .9rem; color: var(--sp-text); flex: 1;
+  }
+  .idx-search-result-tag {
+    font-family: var(--font-mono); font-size: .75rem;
+    color: var(--sp-primary); background: var(--sp-primary-bg);
+    padding: 2px 7px; border-radius: var(--radius-sm); white-space: nowrap;
+  }
+  .idx-search-footer {
+    display: flex; gap: 12px; align-items: center;
+    padding: 8px 14px; border-top: 1px solid var(--sp-border);
+    background: var(--sp-bg-subtle);
+  }
+  .idx-search-hint { display: inline-flex; align-items: center; gap: 4px; font-size: .7rem; color: var(--sp-text-muted); }
+  .idx-search-hint kbd {
+    font-family: var(--font-mono); font-size: .65rem;
+    background: var(--sp-bg-muted); border: 1px solid var(--sp-border);
+    padding: 1px 5px; border-radius: 3px; color: var(--sp-text-secondary);
+  }
+  .idx-search-empty {
+    padding: 36px 24px; text-align: center;
+    color: var(--sp-text-muted); font-size: .9rem;
+  }
+  .idx-search-empty strong { color: var(--sp-text); }
+
+  /* ── Keyboard shortcuts modal ──────────────────────────────────────────── */
+  .shortcuts-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .shortcuts-overlay[hidden] { display: none; }
+  .shortcuts-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+  }
+  .shortcuts-box {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 480px;
+    background: var(--sp-bg); border: 1px solid var(--sp-border);
+    border-radius: var(--radius-lg); overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.3);
+  }
+  .shortcuts-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--sp-border);
+  }
+  .shortcuts-title {
+    font-size: 1rem; font-weight: 700; color: var(--sp-text); margin: 0;
+  }
+  .shortcuts-close {
+    width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-sm); border: 1px solid var(--sp-border);
+    background: var(--sp-bg-subtle); color: var(--sp-text-muted);
+    cursor: pointer; transition: background .12s;
+  }
+  .shortcuts-close:hover { background: var(--sp-bg-muted); color: var(--sp-text); }
+  .shortcuts-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 20px; }
+  .shortcuts-group-title {
+    font-size: .7rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--sp-text-muted); margin-bottom: 8px;
+  }
+  .shortcuts-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; border-bottom: 1px solid var(--sp-border-subtle);
+    font-size: .85rem; color: var(--sp-text-secondary);
+  }
+  .shortcuts-row:last-child { border-bottom: none; }
+  .shortcuts-row kbd {
+    font-family: var(--font-mono); font-size: .72rem;
+    background: var(--sp-bg-muted); border: 1px solid var(--sp-border);
+    border-bottom-width: 2px; padding: 2px 8px; border-radius: 5px;
+    color: var(--sp-text); white-space: nowrap; flex-shrink: 0;
+  }
+  .shortcuts-row span { flex: 1; }
+  .shortcuts-footer {
+    padding: 10px 20px; border-top: 1px solid var(--sp-border);
+    background: var(--sp-bg-subtle); font-size: .75rem; color: var(--sp-text-muted);
+    text-align: center;
+  }
+  .shortcuts-footer kbd {
+    font-family: var(--font-mono); font-size: .68rem;
+    background: var(--sp-bg-muted); border: 1px solid var(--sp-border);
+    padding: 1px 5px; border-radius: 3px; color: var(--sp-text-secondary);
+  }
+
+  /* ── Responsive ────────────────────────────────────────────────────────── */
+
+  /* Tablet (≤1024px) */
+  @media (max-width: 1024px) {
+    .hero { padding: 60px 24px 48px; }
+    .hero-stats { gap: 24px; }
+    .install-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  }
+
+  /* Tablet pequeña / landscape móvil (≤768px) */
+  @media (max-width: 768px) {
+    /* Topbar */
+    .topbar { padding: 0 16px; gap: 10px; height: 52px; }
+    .topbar-nav { display: none; }
+    .topbar-menu-btn { display: flex; }
+    .search-trigger { width: auto; padding: 6px 10px; }
+    .search-kbd { display: none; }
+
+    /* Hero */
+    .hero { padding: 48px 20px 40px; }
+    .hero-title { font-size: clamp(1.9rem, 8vw, 2.6rem); }
+    .hero-sub { font-size: .95rem; }
+    .hero-chips { gap: 6px; }
+    /* Actions: primary buttons full-width, ghost en fila */
+    .hero-actions { gap: 8px; }
+    /* sp-button en hero: los primary/secondary full width, ghost en fila */
+    .hero-actions sp-button[variant="primary"],
+    .hero-actions sp-button[variant="secondary"] { width: 100%; }
+    .hero-actions sp-button[variant="ghost"] { flex: 1; }
+
+    /* Stats */
+    .hero-stats { gap: 0; margin-top: 36px; padding-top: 28px; }
+    .stat-sep { display: none; }
+
+    /* Sections */
+    .section { padding: 44px 20px; }
+    .section-title { font-size: 1.45rem; }
+    .section-sub { font-size: .88rem; }
+
+    /* Install */
+    .install-grid { grid-template-columns: 1fr; }
+
+    /* Catalog search */
+    .cat-search-wrap { max-width: 100%; }
+
+    /* Catalog filters: scrollable row on mobile */
+    .cat-filters {
+      flex-wrap: nowrap; justify-content: flex-start;
+      padding-bottom: 4px; gap: 6px;
+    }
+    .cat-filter { flex-shrink: 0; font-size: .78rem; padding: 5px 12px; }
+    .comp-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+
+    /* Footer */
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .footer-links { flex-wrap: wrap; gap: 10px; }
+    .footer-note { margin-left: 0; }
+
+    /* Search modal */
+    /* Search modal */
+    .idx-search-overlay { padding-top: 0; align-items: flex-end; }
+    .idx-search-box { border-radius: var(--radius-lg) var(--radius-lg) 0 0; margin: 0; max-width: 100%; }
+  }
+
+  /* Móvil pequeño (≤480px) */
+  @media (max-width: 480px) {
+    .topbar-logo-text { display: none; }
+    .search-trigger-text { display: none; }
+
+    .hero { padding: 36px 16px 32px; }
+    .hero-badge { font-size: .7rem; margin-bottom: 18px; }
+    .hero-title { font-size: clamp(1.65rem, 9vw, 2.2rem); margin-bottom: 14px; }
+    .hero-sub { font-size: .88rem; margin-bottom: 20px; }
+    .hero-chips { margin-bottom: 24px; }
+    .hero-stats { margin-top: 28px; padding-top: 20px; }
+
+    .section { padding: 32px 16px; }
+    .section-title { font-size: 1.25rem; }
+
+    .install-code { font-size: .78rem; }
+
+    .comp-grid { grid-template-columns: 1fr; }
+    .comp-card-desc { display: none; }
+  }
+</style>

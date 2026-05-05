@@ -1,0 +1,93 @@
+---
+// TOC sections list — matches section IDs in index.astro
+const sections = [
+  { id: "getting-started", label: "Getting Started" },
+  { id: "buttons", label: "sp-button" },
+  { id: "copy-button", label: "sp-copy-button" },
+  { id: "input", label: "sp-input" },
+  { id: "textarea", label: "sp-textarea" },
+  { id: "select", label: "sp-select" },
+  { id: "combobox", label: "sp-combobox" },
+  { id: "checkbox", label: "sp-checkbox" },
+  { id: "switch", label: "sp-switch" },
+  { id: "radio", label: "sp-radio" },
+  { id: "slider", label: "sp-slider" },
+  { id: "rating", label: "sp-rating" },
+  { id: "number-input", label: "sp-number-input" },
+  { id: "otp-input", label: "sp-otp-input" },
+  { id: "tag-input", label: "sp-tag-input" },
+  { id: "autocomplete", label: "sp-autocomplete" },
+  { id: "file-upload", label: "sp-file-upload" },
+  { id: "form-field", label: "sp-form-field" },
+  { id: "time-picker", label: "sp-time-picker" },
+  { id: "color-picker", label: "sp-color-picker" },
+  { id: "tabs", label: "sp-tabs" },
+  { id: "breadcrumb", label: "sp-breadcrumb" },
+  { id: "pagination", label: "sp-pagination" },
+  { id: "stepper", label: "sp-stepper" },
+  { id: "menu", label: "sp-menu" },
+  { id: "navbar", label: "sp-navbar" },
+  { id: "sidebar-comp", label: "sp-sidebar" },
+  { id: "modal", label: "sp-modal" },
+  { id: "drawer", label: "sp-drawer" },
+  { id: "tooltip", label: "sp-tooltip" },
+  { id: "popover", label: "sp-popover" },
+  { id: "toast", label: "sp-toast" },
+  { id: "toast-stack", label: "sp-toast-stack" },
+  { id: "confirm-dialog", label: "sp-confirm-dialog" },
+  { id: "table", label: "sp-table" },
+  { id: "accordion", label: "sp-accordion" },
+  { id: "card", label: "sp-card" },
+  { id: "badge", label: "sp-badge" },
+  { id: "avatar", label: "sp-avatar" },
+  { id: "stat", label: "sp-stat" },
+  { id: "timeline", label: "sp-timeline" },
+  { id: "tree", label: "sp-tree" },
+  { id: "calendar", label: "sp-calendar" },
+  { id: "gallery", label: "sp-gallery" },
+  { id: "carousel", label: "sp-carousel" },
+  { id: "tag", label: "sp-tag" },
+  { id: "alert", label: "sp-alert" },
+  { id: "progress", label: "sp-progress-bar" },
+  { id: "spinner", label: "sp-spinner" },
+  { id: "skeleton", label: "sp-skeleton" },
+  { id: "split-panel", label: "sp-split-panel" },
+  { id: "scroll-area", label: "sp-scroll-area" },
+  { id: "divider", label: "sp-divider" },
+  { id: "empty-state", label: "sp-empty-state" },
+  { id: "icon", label: "sp-icon" },
+  { id: "kbd", label: "sp-kbd" },
+  { id: "form-demo", label: "Formulario completo" },
+  { id: "command-palette", label: "sp-command-palette" },
+];
+---
+
+<nav class="toc" id="toc" aria-label="En esta página">
+  <div class="toc-title">En esta página</div>
+  {sections.map((s) => (
+    <a class="toc-item" href={`#${s.id}`} data-toc-id={s.id}>{s.label}</a>
+  ))}
+</nav>
+
+<script>
+  const tocItems = document.querySelectorAll<HTMLElement>('.toc-item[data-toc-id]');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocItems.forEach((el) => {
+            el.classList.toggle('active', el.dataset.tocId === id);
+          });
+          // Scroll active item into view within TOC
+          const active = document.querySelector<HTMLElement>(`.toc-item[data-toc-id="${id}"]`);
+          active?.scrollIntoView({ block: 'nearest' });
+        }
+      });
+    },
+    { rootMargin: '-15% 0px -75% 0px' }
+  );
+
+  document.querySelectorAll<HTMLElement>('section.section[id]').forEach((el) => observer.observe(el));
+</script>

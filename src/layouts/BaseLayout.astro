@@ -1,0 +1,72 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = "SP Components — Librería de Web Components",
+  description = "Librería de 59 Web Components construida con Lit. Compatible con cualquier framework. Dark mode, accesible, TypeScript, tree-shakeable."
+} = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <!-- Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script is:inline src="/sp-component.min.js"></script>
+    <!-- Apply theme before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        var stored = localStorage.getItem('sp-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = stored || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+    <!-- Global copy toast -->
+    <div id="__copy-toast" role="status" aria-live="polite">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      ¡Copiado!
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/tokens.css";
+  @import "../styles/global.css";
+
+  #__copy-toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 8px;
+    background: #111827; color: #f9fafb;
+    font-size: .85rem; font-weight: 500; font-family: var(--font-sans);
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    pointer-events: none;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  #__copy-toast.--in {
+    opacity: 1; transform: translateY(0);
+  }
+</style>
+
+<script is:inline>
+  window.__showCopyToast = function(msg) {
+    var t = document.getElementById('__copy-toast');
+    if (!t) return;
+    t.childNodes[t.childNodes.length - 1].textContent = ' ' + (msg || '¡Copiado!');
+    t.classList.add('--in');
+    clearTimeout(window.__copyToastTimer);
+    window.__copyToastTimer = setTimeout(function() { t.classList.remove('--in'); }, 2000);
+  };
+</script>

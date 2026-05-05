@@ -1,0 +1,247 @@
+---
+const groups = [
+  {
+    title: "Botones & Acciones",
+    items: [
+      { label: "sp-button", id: "buttons" },
+      { label: "sp-copy-button", id: "copy-button" },
+    ],
+  },
+  {
+    title: "Formularios",
+    items: [
+      { label: "sp-input", id: "input" },
+      { label: "sp-textarea", id: "textarea" },
+      { label: "sp-select", id: "select" },
+      { label: "sp-combobox", id: "combobox" },
+      { label: "sp-checkbox", id: "checkbox" },
+      { label: "sp-switch", id: "switch" },
+      { label: "sp-radio", id: "radio" },
+      { label: "sp-slider", id: "slider" },
+      { label: "sp-rating", id: "rating" },
+      { label: "sp-number-input", id: "number-input" },
+      { label: "sp-otp-input", id: "otp-input" },
+      { label: "sp-tag-input", id: "tag-input" },
+      { label: "sp-autocomplete", id: "autocomplete" },
+      { label: "sp-file-upload", id: "file-upload" },
+      { label: "sp-form-field", id: "form-field" },
+      { label: "sp-time-picker", id: "time-picker" },
+      { label: "sp-color-picker", id: "color-picker" },
+    ],
+  },
+  {
+    title: "Navegación",
+    items: [
+      { label: "sp-tabs", id: "tabs" },
+      { label: "sp-breadcrumb", id: "breadcrumb" },
+      { label: "sp-pagination", id: "pagination" },
+      { label: "sp-stepper", id: "stepper" },
+      { label: "sp-menu", id: "menu" },
+      { label: "sp-navbar", id: "navbar" },
+      { label: "sp-sidebar", id: "sidebar-comp" },
+    ],
+  },
+  {
+    title: "Overlays",
+    items: [
+      { label: "sp-modal", id: "modal" },
+      { label: "sp-drawer", id: "drawer" },
+      { label: "sp-tooltip", id: "tooltip" },
+      { label: "sp-popover", id: "popover" },
+      { label: "sp-toast", id: "toast" },
+      { label: "sp-toast-stack", id: "toast-stack" },
+      { label: "sp-confirm-dialog", id: "confirm-dialog" },
+    ],
+  },
+  {
+    title: "Datos",
+    items: [
+      { label: "sp-table", id: "table" },
+      { label: "sp-accordion", id: "accordion" },
+      { label: "sp-card", id: "card" },
+      { label: "sp-badge", id: "badge" },
+      { label: "sp-avatar", id: "avatar" },
+      { label: "sp-stat", id: "stat" },
+      { label: "sp-timeline", id: "timeline" },
+      { label: "sp-tree", id: "tree" },
+      { label: "sp-calendar", id: "calendar" },
+      { label: "sp-gallery", id: "gallery" },
+      { label: "sp-carousel", id: "carousel" },
+      { label: "sp-tag", id: "tag" },
+    ],
+  },
+  {
+    title: "Feedback",
+    items: [
+      { label: "sp-alert", id: "alert" },
+      { label: "sp-progress-bar", id: "progress" },
+      { label: "sp-spinner", id: "spinner" },
+      { label: "sp-skeleton", id: "skeleton" },
+    ],
+  },
+  {
+    title: "Layout",
+    items: [
+      { label: "sp-split-panel", id: "split-panel" },
+      { label: "sp-scroll-area", id: "scroll-area" },
+      { label: "sp-divider", id: "divider" },
+      { label: "sp-empty-state", id: "empty-state" },
+      { label: "sp-icon", id: "icon" },
+      { label: "sp-kbd", id: "kbd" },
+    ],
+  },
+  {
+    title: "Avanzado",
+    items: [
+      { label: "Formulario completo", id: "form-demo" },
+      { label: "sp-command-palette", id: "command-palette" },
+    ],
+  },
+];
+---
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+    SP Components
+    <span class="sidebar-version">v1.0</span>
+  </div>
+
+  <!-- Cmd+K search trigger -->
+  <div class="sidebar-search">
+    <button class="sidebar-search-inner" id="sidebar-search-btn" aria-label="Buscar componentes">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="sidebar-search-text">Buscar...</span>
+      <kbd class="sidebar-search-shortcut">⌘K</kbd>
+    </button>
+  </div>
+
+  <!-- Inline filter -->
+  <div class="sidebar-filter">
+    <input
+      class="sidebar-filter-input"
+      id="sidebar-filter"
+      type="search"
+      placeholder="Filtrar componentes..."
+      autocomplete="off"
+      spellcheck="false"
+    />
+  </div>
+
+  <div class="sidebar-nav" id="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-group-title">Inicio</div>
+      <a class="nav-item" href="#hero">Presentación</a>
+      <a class="nav-item" href="#getting-started">Getting Started</a>
+    </div>
+    {groups.map((group) => (
+      <div class="nav-group" data-group>
+        <div class="nav-group-title nav-group-toggle" data-toggle>{group.title}</div>
+        <div class="nav-group-items">
+          {group.items.map((item) => (
+            <a class="nav-item" href={`#${item.id}`} data-label={item.label.toLowerCase()}>{item.label}</a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="https://github.com" target="_blank" rel="noopener" class="sidebar-footer-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+    <a href="https://www.npmjs.com" target="_blank" rel="noopener" class="sidebar-footer-link">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M0 0v24h24V0H0zm19.2 19.2H4.8V4.8h14.4v14.4z"/><path d="M7.2 7.2h9.6v9.6h-2.4V9.6H12v7.2H7.2z"/></svg>
+      npm
+    </a>
+  </div>
+</nav>
+
+<script>
+  // ── Sidebar filter ──────────────────────────────────────
+  const filterInput = document.getElementById('sidebar-filter') as HTMLInputElement;
+  filterInput?.addEventListener('input', () => {
+    const q = filterInput.value.toLowerCase().trim();
+    document.querySelectorAll<HTMLElement>('.nav-group[data-group]').forEach((group) => {
+      const items = group.querySelectorAll<HTMLElement>('.nav-item');
+      let visible = 0;
+      items.forEach((item) => {
+        const label = item.dataset.label || item.textContent?.toLowerCase() || '';
+        const match = !q || label.includes(q);
+        item.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+      group.classList.toggle('all-hidden', visible === 0);
+      // Expand groups when filtering
+      if (q) group.classList.remove('collapsed');
+    });
+  });
+
+  // ── Collapsible groups ──────────────────────────────────
+  document.querySelectorAll<HTMLElement>('.nav-group-toggle[data-toggle]').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const group = toggle.closest<HTMLElement>('.nav-group')!;
+      group.classList.toggle('collapsed');
+      const isCollapsed = group.classList.contains('collapsed');
+      toggle.setAttribute('aria-expanded', String(!isCollapsed));
+    });
+  });
+
+  // ── Cmd+K search trigger ─────────────────────────────────
+  document.getElementById('sidebar-search-btn')?.addEventListener('click', () => {
+    document.getElementById('search-backdrop')?.classList.add('open');
+    setTimeout(() => (document.getElementById('search-input') as HTMLInputElement)?.focus(), 50);
+  });
+
+  // ── Active nav item on scroll ────────────────────────────
+  const navItems = document.querySelectorAll<HTMLElement>('.nav-item[href^="#"]');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          navItems.forEach((a) => a.classList.remove('active'));
+          const id = entry.target.id;
+          document.querySelector<HTMLElement>(`.nav-item[href="#${id}"]`)?.classList.add('active');
+        }
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+  document.querySelectorAll<HTMLElement>('section.section[id], div.hero[id]').forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  .sidebar-version {
+    margin-left: auto;
+    font-size: .65rem;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: var(--radius-full);
+    background: var(--sp-primary-bg);
+    color: var(--sp-primary);
+  }
+  .sidebar-footer {
+    padding: 10px 12px;
+    border-top: 1px solid var(--sp-border);
+    display: flex;
+    gap: 6px;
+  }
+  .sidebar-footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: .75rem;
+    color: var(--sp-text-muted);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    transition: background .15s, color .15s;
+  }
+  .sidebar-footer-link:hover { background: var(--sp-bg-muted); color: var(--sp-text); }
+</style>

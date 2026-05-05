@@ -1,0 +1,306 @@
+---
+interface Props {
+  title: string;
+  bodyClass?: string;
+}
+const { title, bodyClass = "" } = Astro.props;
+---
+<div class="demo-card">
+  <div class="demo-card-header">
+    <span class="demo-card-title">{title}</span>
+    <div class="demo-card-actions">
+      <div class="demo-card-tabs" role="tablist">
+        <button class="demo-tab demo-tab--active" data-tab="preview" role="tab" aria-selected="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Preview
+        </button>
+        <button class="demo-tab" data-tab="code" role="tab" aria-selected="false">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Código
+        </button>
+      </div>
+      <a class="demo-card-stackblitz" href="https://stackblitz.com/fork/web-platform" target="_blank" rel="noopener" title="Abrir en StackBlitz">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M10.797 14.182H3.635L16.728 0l-3.525 9.818H20.3L7.188 24z"/></svg>
+        <span>StackBlitz</span>
+      </a>
+      <button class="demo-card-copy" aria-label="Copiar HTML">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        <span>Copiar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class={`demo-card-body ${bodyClass}`} data-panel="preview">
+    <slot />
+  </div>
+
+  <div class="demo-card-code" data-panel="code" hidden>
+    <pre><code></code></pre>
+  </div>
+</div>
+
+<script>
+  function formatHTML(raw: string): string {
+    let indent = 0;
+    return raw
+      .replace(/>\s+</g, '><')
+      .replace(/(<\/[^>]+>|<[^/!][^>]*[^/]>|<[^>]+\/>)/g, (tag) => {
+        if (tag.startsWith('</')) {
+          indent = Math.max(0, indent - 1);
+          return '\n' + '  '.repeat(indent) + tag;
+        } else if (tag.endsWith('/>') || /^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i.test(tag)) {
+          return '\n' + '  '.repeat(indent) + tag;
+        } else {
+          const out = '\n' + '  '.repeat(indent) + tag;
+          indent++;
+          return out;
+        }
+      })
+      .replace(/\n\s*\n/g, '\n')
+      .trim();
+  }
+
+  function highlightHTML(code: string): string {
+    const esc = code.replace(/&/g, '&amp;').replace(/</g, '\x00LT\x00').replace(/>/g, '\x00GT\x00');
+    return esc
+      .replace(/\x00LT\x00(\/?)([a-zA-Z][a-zA-Z0-9-]*)([^]*?)\x00GT\x00/g, (_, slash, tag, rest) => {
+        const isWebComponent = tag.includes('-');
+        const tagClass = isWebComponent ? 'hl-tag-wc' : 'hl-tag';
+        const coloredAttrs = rest.replace(
+          /\s([\w-:@.]+)(="([^"]*)")?/g,
+          (_, attr, eq, val) =>
+            val !== undefined
+              ? ` <span class="hl-attr">${attr}</span><span class="hl-eq">=</span><span class="hl-val">"${val}"</span>`
+              : ` <span class="hl-bool">${attr}</span>`
+        );
+        return `<span class="hl-punct">&lt;</span><span class="${tagClass}">${slash}${tag}</span>${coloredAttrs}<span class="hl-punct">&gt;</span>`;
+      })
+      .replace(/\x00LT\x00/g, '&lt;').replace(/\x00GT\x00/g, '&gt;');
+  }
+
+  function addLineNumbers(html: string): string {
+    const lines = html.split('\n');
+    return lines.map((line, i) =>
+      `<span class="hl-line"><span class="hl-ln">${i + 1}</span>${line}</span>`
+    ).join('\n');
+  }
+
+  document.addEventListener('click', async (e) => {
+    const target = e.target as Element;
+
+    // ── Tab toggle ──────────────────────────────────────────────
+    const tab = target.closest<HTMLButtonElement>('.demo-tab');
+    if (tab) {
+      const card = tab.closest('.demo-card')!;
+      const which = tab.dataset.tab!;
+
+      card.querySelectorAll('.demo-tab').forEach((t) => {
+        t.classList.toggle('demo-tab--active', t === tab);
+        t.setAttribute('aria-selected', String(t === tab));
+      });
+
+      const preview = card.querySelector<HTMLElement>('[data-panel="preview"]')!;
+      const codePanel = card.querySelector<HTMLElement>('[data-panel="code"]')!;
+
+      if (which === 'code') {
+        // Populate code lazily on first open
+        const codeEl = codePanel.querySelector('code')!;
+        if (!codeEl.dataset.ready) {
+          const raw = formatHTML(preview.innerHTML);
+          codeEl.innerHTML = addLineNumbers(highlightHTML(raw));
+          codeEl.dataset.ready = '1';
+        }
+        preview.hidden = true;
+        codePanel.hidden = false;
+      } else {
+        preview.hidden = false;
+        codePanel.hidden = true;
+      }
+      return;
+    }
+
+    // ── Copy button ─────────────────────────────────────────────
+    const copyBtn = target.closest<HTMLButtonElement>('.demo-card-copy');
+    if (!copyBtn) return;
+
+    const card = copyBtn.closest('.demo-card')!;
+    const preview = card.querySelector<HTMLElement>('[data-panel="preview"]')!;
+    const html = formatHTML(preview.innerHTML);
+
+    try {
+      await navigator.clipboard.writeText(html);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = html;
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+
+    (window as any).__showCopyToast?.();
+
+    const label = copyBtn.querySelector('span')!;
+    const orig = label.textContent!;
+    label.textContent = '¡Copiado!';
+    copyBtn.classList.add('demo-card-copy--done');
+    setTimeout(() => {
+      label.textContent = orig;
+      copyBtn.classList.remove('demo-card-copy--done');
+    }, 2000);
+  });
+</script>
+
+<style>
+  /* Header layout */
+  .demo-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .demo-card-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .demo-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Tab group */
+  .demo-card-tabs {
+    display: flex;
+    border: 1px solid var(--sp-border);
+    border-radius: 7px;
+    overflow: hidden;
+    background: var(--sp-bg);
+  }
+  .demo-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--sp-text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    white-space: nowrap;
+  }
+  .demo-tab + .demo-tab {
+    border-left: 1px solid var(--sp-border);
+  }
+  .demo-tab:hover {
+    background: var(--sp-bg-muted);
+    color: var(--sp-text);
+  }
+  .demo-tab--active {
+    background: var(--sp-primary-bg);
+    color: var(--sp-primary);
+  }
+  .demo-tab--active:hover {
+    background: var(--sp-primary-bg-hover);
+  }
+
+  /* Copy button */
+  .demo-card-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--sp-border);
+    background: var(--sp-bg);
+    color: var(--sp-text-muted);
+    font-size: .75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .demo-card-copy:hover {
+    background: var(--sp-bg-muted);
+    color: var(--sp-text);
+    border-color: var(--sp-border-strong);
+  }
+  .demo-card-copy--done {
+    background: var(--sp-success-bg);
+    color: var(--sp-success);
+    border-color: var(--sp-success);
+  }
+
+  /* Code panel */
+  .demo-card-code {
+    border-top: 1px solid var(--sp-border);
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+  }
+  .demo-card-code pre {
+    margin: 0;
+    padding: 20px 24px;
+    overflow-x: auto;
+    background: #0f172a;
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    line-height: 1.7;
+  }
+  .demo-card-code code {
+    background: none;
+    color: #94a3b8;
+  }
+
+  /* Syntax colors */
+  :global(.hl-tag)    { color: #7dd3fc; }
+  :global(.hl-tag-wc) { color: #c4b5fd; font-weight: 500; } /* web components in purple */
+  :global(.hl-attr)   { color: #86efac; }
+  :global(.hl-bool)   { color: #fb923c; } /* boolean attrs */
+  :global(.hl-val)    { color: #fda4af; }
+  :global(.hl-eq)     { color: #94a3b8; }
+  :global(.hl-punct)  { color: #64748b; }
+
+  /* Line numbers */
+  :global(.hl-line)   { display: block; }
+  :global(.hl-line:hover) { background: rgba(255,255,255,.04); border-radius: 2px; }
+  :global(.hl-ln) {
+    display: inline-block;
+    width: 2.2em;
+    color: #475569;
+    text-align: right;
+    margin-right: 16px;
+    user-select: none;
+    font-size: .75rem;
+  }
+
+  /* StackBlitz button */
+  .demo-card-stackblitz {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--sp-border);
+    background: var(--sp-bg);
+    color: var(--sp-text-muted);
+    font-size: .75rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .15s, color .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .demo-card-stackblitz:hover {
+    background: #1e40af22;
+    color: #3b82f6;
+    border-color: #3b82f6;
+  }
+</style>
