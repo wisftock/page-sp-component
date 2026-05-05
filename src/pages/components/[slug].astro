@@ -70,7 +70,7 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
 
     <!-- ── Left sidebar ──────────────────────────────────────────────────── -->
     <nav class="comp-sidebar" id="comp-sidebar">
-      <a class="comp-sidebar-logo" href="/">
+      <a class="comp-sidebar-logo" href={import.meta.env.BASE_URL}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7" rx="1"/>
           <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -81,7 +81,7 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
       </a>
 
       <div class="comp-nav-back">
-        <a href="/" class="comp-nav-back-link">
+        <a href={import.meta.env.BASE_URL} class="comp-nav-back-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
           Todos los componentes
         </a>
@@ -95,7 +95,7 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
             {items.map((c) => (
               <a
                 class={`comp-nav-item${c.slug === slug ? ' active' : ''}`}
-                href={`/components/${c.slug}`}
+                href={`${import.meta.env.BASE_URL}components/${c.slug}`}
               >
                 {c.label}
               </a>
@@ -110,9 +110,9 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
 
       <!-- Breadcrumb -->
       <nav class="comp-breadcrumb" aria-label="Breadcrumb">
-        <a href="/" class="comp-bc-link">Inicio</a>
+        <a href={import.meta.env.BASE_URL} class="comp-bc-link">Inicio</a>
         <span class="comp-bc-sep">›</span>
-        <a href="/" class="comp-bc-link">Componentes</a>
+        <a href={import.meta.env.BASE_URL} class="comp-bc-link">Componentes</a>
         <span class="comp-bc-sep">›</span>
         <span class="comp-bc-current">{comp.label}</span>
       </nav>
@@ -134,7 +134,7 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
         {componentStatuses[comp.slug] === 'beta' && <span class="comp-status-pill comp-status-pill--beta">Beta</span>}
         {!componentStatuses[comp.slug] && <span class="comp-status-pill comp-status-pill--stable">Estable</span>}
         {componentSizes[comp.slug] && <span class="comp-size-pill">{componentSizes[comp.slug]} min+gz</span>}
-        <a href={`/#${comp.indexId}`} class="comp-view-demo-link">
+        <a href={`${import.meta.env.BASE_URL}#${comp.indexId}`} class="comp-view-demo-link">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           Ver demo
         </a>
@@ -325,7 +325,7 @@ const usageHtml = doc.usage ? highlightUsage(doc.usage) : null;
           <h2 class="comp-section-title">Relacionados en {comp.category}</h2>
           <div class="comp-related-grid">
             {catComponents.slice(0, 8).map((c) => (
-              <a class="comp-related-card" href={`/components/${c.slug}`}>
+              <a class="comp-related-card" href={`${import.meta.env.BASE_URL}components/${c.slug}`}>
                 <div class="comp-related-initial">{c.label.charAt(0)}</div>
                 <div>
                   <div class="comp-related-name">{c.label}</div>

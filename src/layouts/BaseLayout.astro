@@ -5,8 +5,9 @@ interface Props {
 }
 const {
   title = "SP Components — Librería de Web Components",
-  description = "Librería de 59 Web Components construida con Lit. Compatible con cualquier framework. Dark mode, accesible, TypeScript, tree-shakeable."
+  description = "Librería de Web Components construida con Lit. Compatible con cualquier framework. Dark mode, accesible, TypeScript, tree-shakeable."
 } = Astro.props;
+const cdnSrc = `${import.meta.env.BASE_URL}sp-component.min.js`;
 ---
 <!doctype html>
 <html lang="es">
@@ -19,7 +20,7 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <script is:inline src="/sp-component.min.js"></script>
+    <Fragment set:html={`<script src="${cdnSrc}"></script>`} />
     <!-- Apply theme before paint to avoid flash -->
     <script is:inline>
       (function () {

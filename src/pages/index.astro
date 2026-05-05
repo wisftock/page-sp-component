@@ -8,7 +8,7 @@ const compData = components.map(c => ({ slug: c.slug, label: c.label, tag: c.tag
 
   <!-- ── Top bar ──────────────────────────────────────────────────────────── -->
   <header class="topbar">
-    <a class="topbar-logo" href="/">
+    <a class="topbar-logo" href={import.meta.env.BASE_URL}>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="7" height="7" rx="1"/>
         <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -189,7 +189,7 @@ import 'sp-component';
           <h3 class="cat-group-title">{cat}</h3>
           <div class="comp-grid">
             {components.filter(c => c.category === cat).map(c => (
-              <a class="comp-card" href={`/components/${c.slug}`} data-name={c.label.toLowerCase()} data-tag={c.tag} data-desc={c.desc.toLowerCase()}>
+              <a class="comp-card" href={`${import.meta.env.BASE_URL}components/${c.slug}`} data-name={c.label.toLowerCase()} data-tag={c.tag} data-desc={c.desc.toLowerCase()}>
                 <div class="comp-card-body">
                   <div class="comp-card-name-row">
                     <span class="comp-card-name">{c.label}</span>
@@ -294,8 +294,9 @@ import 'sp-component';
 
 </BaseLayout>
 
-<script define:vars={{ compData }} is:inline>
+<script define:vars={{ compData, BASE_URL: import.meta.env.BASE_URL }} is:inline>
   window.__COMP_DATA__ = compData;
+  window.__BASE_URL__ = BASE_URL;
 </script>
 
 <script>
@@ -426,7 +427,7 @@ import 'sp-component';
       return;
     }
     modalResults.innerHTML = results.map((c, i) => `
-      <a class="idx-search-result${i === 0 ? ' idx-search-result--active' : ''}" href="/components/${c.slug}">
+      <a class="idx-search-result${i === 0 ? ' idx-search-result--active' : ''}" href="${(window as any).__BASE_URL__}components/${c.slug}">
         <span class="idx-search-result-label">${c.label}</span>
         <span class="idx-search-result-tag">&lt;${c.tag}&gt;</span>
       </a>
