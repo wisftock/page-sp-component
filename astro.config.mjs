@@ -7,6 +7,6 @@ export default defineConfig({
   compressHTML: true,
   outDir: '_site',
   build: {
-    assets: '_assets',
+    assets: 'assets',
   },
 });
