@@ -1,7 +1,8 @@
 {
-  "name": "tasty-tower",
+  "name": "sp-component-docs",
+  "description": "Sitio de documentación de SP Components — librería de Web Components con Lit 3",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "node": ">=22.12.0"
   },
