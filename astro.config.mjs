@@ -2,8 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://wisftock.gitlab.io/page-libreria-component',
-  base: '/page-libreria-component/',
+  site: 'https://page-libreria-component.pages.dev',
   compressHTML: true,
   outDir: '_site',
   build: {
